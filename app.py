@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 import pickle
-
+import numpy as np
 # Load the trained model
-with open('weight_saved.pkl', 'rb') as f:
+with open('Model_saving.pkl', 'rb') as f:
     loaded_model = pickle.load(f)
 
 # Streamlit App UI
@@ -18,6 +18,7 @@ workout_type = st.selectbox("Workout Type", [0, 1, 2, 3], format_func=lambda x: 
 
 # Predict button
 if st.button("Predict Weight"):
+    Input=np.array([[gender,age,height,workout_type]])
     input_data = pd.DataFrame([{
         'Gender': gender,
         'Age': age,
@@ -25,5 +26,5 @@ if st.button("Predict Weight"):
         'Workout_Type': workout_type
     }])
     
-    predicted_weight = loaded_model.predict(input_data)[0]
-    st.success(f"Predicted Weight: {predicted_weight:.2f} kg")
+    predicted_weight = loaded_model.predict(Input)
+    st.success(f"Predicted Weight: {predicted_weight[0]:.2f} kg")
